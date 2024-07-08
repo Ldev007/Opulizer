@@ -2,13 +2,13 @@
 
 An app made to simulate a real-time opinion trading environment to visualize the data points generated in real-time, representing opinions and their probabilities over time on a line chart.
 
-### Requirements :
+### 📄 Requirements :
 
 - Flutter >= 3.22.2
 - Dart >= 3.4.3
 - Google account to use Firebase and it's services
 
-### Steps to run :
+### :gear: Steps to run :
 
 1. Setup and test run backend service [from here](https://github.com/Ldev007/opulator)
 2. Clone the repo : ```git clone https://github.com/Ldev007/opulizer.git```
