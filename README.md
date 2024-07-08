@@ -12,7 +12,7 @@ An app made to simulate a real-time opinion trading environment to visualize the
 
 1. Setup and test run backend service [from here](https://github.com/Ldev007/opulator)
 2. Clone the repo : ```git clone https://github.com/Ldev007/opulizer.git```
-3. Configure and setup Firebase, know how [from here](https://firebase.google.com/docs/flutter/setup?platform=android) (:warning: Note: Follow only till [Step-3](https://firebase.google.com/docs/flutter/setup?platform=android#configure-firebase))
+3. Configure and setup Firebase, know how [from here](https://firebase.google.com/docs/flutter/setup?platform=android) ( :warning: Note: Follow only till [Step-3](https://firebase.google.com/docs/flutter/setup?platform=android#configure-firebase))
 4. Configure and setup Firebase Cloud Firestore know how [from here](https://firebase.google.com/docs/firestore/quickstart#dart)
 5. Execute : ```flutter pub get```
 6. Execute : ```flutter run --debug```
