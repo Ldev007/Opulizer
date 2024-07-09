@@ -88,19 +88,23 @@ class ChartHelper {
         return Column(
           children: [
             title != null
-                ? Text(
-                    '|',
-                    style: TextStyle(
-                      color: chartTheme.chartTitleTextColor!,
-                      fontSize: defaultThemeLabelFontSize * 0.7,
+                ? Flexible(
+                    child: Text(
+                      '|',
+                      style: TextStyle(
+                        color: chartTheme.chartTitleTextColor!,
+                        fontSize: defaultThemeLabelFontSize * 0.7,
+                      ),
                     ),
                   )
                 : const SizedBox(),
-            Text(
-              title?.substring(0, 5) ?? '',
-              style: TextStyle(
-                color: chartTheme.chartTitleTextColor!,
-                fontSize: defaultThemeLabelFontSize * 0.7,
+            Flexible(
+              child: Text(
+                title?.substring(0, 5) ?? '',
+                style: TextStyle(
+                  color: chartTheme.chartTitleTextColor!,
+                  fontSize: defaultThemeLabelFontSize * 0.7,
+                ),
               ),
             ),
           ],

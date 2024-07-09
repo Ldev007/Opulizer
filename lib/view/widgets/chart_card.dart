@@ -18,6 +18,7 @@ class ChartCard extends StatelessWidget {
         screenDimensions.width * 0.05,
         screenDimensions.width * 0.04,
       ),
+      margin: EdgeInsets.symmetric(vertical: screenDimensions.height * 0.25),
       child: child,
     );
   }

@@ -177,149 +177,142 @@ class ChartPage extends ConsumerWidget {
                           children: [
                             Align(
                               alignment: const Alignment(0, 0),
-                              child: AspectRatio(
-                                aspectRatio: 1.45,
-                                child: ChartCard(
-                                  child: LineChart(
-                                    LineChartData(
-                                      minY: 0,
-                                      maxY: 100,
+                              child: ChartCard(
+                                child: LineChart(
+                                  LineChartData(
+                                    minY: 0,
+                                    maxY: 100,
+                                    minX: minX,
+                                    maxX: maxX,
+                                    lineTouchData: ChartHelper.getLineTouchData(
+                                      chartTheme: chartTheme,
+                                      getTooltipItems: (touchedSpots) =>
+                                          touchedSpots.map(
+                                        (spot) {
+                                          if (spot.x >= minX &&
+                                              spot.y <= maxX) {
+                                            return ChartHelper
+                                                .getLineTooltipItem(
+                                              chartTheme: chartTheme,
+                                              time: timeFormat.format(DateTime
+                                                  .fromMillisecondsSinceEpoch(
+                                                      (spot.x * 1000).toInt())),
+                                              probability:
+                                                  '${spot.y.toStringAsFixed(2)}%',
+                                              opinion:
+                                                  ' ${snaps.data!.priceRecords.where((testRecord) => testRecord.probability == spot.y && (testRecord.timestamp.millisecondsSinceEpoch / 1000) == spot.x).first.opinion}',
+                                              defaultThemeLabelFontSize:
+                                                  defaultTextThemeLabelFontSize,
+                                            );
+                                          }
+                                        },
+                                      ).toList(),
                                       minX: minX,
                                       maxX: maxX,
-                                      lineTouchData:
-                                          ChartHelper.getLineTouchData(
-                                        chartTheme: chartTheme,
-                                        getTooltipItems: (touchedSpots) =>
-                                            touchedSpots.map(
-                                          (spot) {
-                                            if (spot.x >= minX &&
-                                                spot.y <= maxX) {
-                                              return ChartHelper
-                                                  .getLineTooltipItem(
-                                                chartTheme: chartTheme,
-                                                time: timeFormat.format(DateTime
-                                                    .fromMillisecondsSinceEpoch(
-                                                        (spot.x * 1000)
-                                                            .toInt())),
-                                                probability:
-                                                    '${spot.y.toStringAsFixed(2)}%',
-                                                opinion:
-                                                    ' ${snaps.data!.priceRecords.where((testRecord) => testRecord.probability == spot.y && (testRecord.timestamp.millisecondsSinceEpoch / 1000) == spot.x).first.opinion}',
-                                                defaultThemeLabelFontSize:
-                                                    defaultTextThemeLabelFontSize,
+                                    ),
+                                    clipData: const FlClipData.all(),
+                                    gridData: const FlGridData(show: false),
+                                    borderData: ChartHelper.getBorderData(
+                                      chartTheme: chartTheme,
+                                    ),
+                                    lineBarsData: [
+                                      LineChartBarData(
+                                        gradient:
+                                            chartTheme.chartLineColorGradient,
+                                        spots: snaps.data!.priceRecords
+                                            .map((snap) => FlSpot(
+                                                  snap.timestamp
+                                                          .millisecondsSinceEpoch /
+                                                      1000,
+                                                  snap.probability.toDouble(),
+                                                ))
+                                            .toList(),
+                                        dotData: ChartHelper.getDotData(
+                                            chartTheme: chartTheme,
+                                            operation: (spotIndex) {
+                                              if (snaps
+                                                      .data!
+                                                      .priceRecords[spotIndex]
+                                                      .opinion ==
+                                                  Constants
+                                                      .yesOpinionGuideLabel) {
+                                                return chartTheme
+                                                    .dotStrokeColorForYesOpinion!;
+                                              } else {
+                                                return chartTheme
+                                                    .dotStrokeColorForNoOpinion!;
+                                              }
+                                            }),
+                                      ),
+                                    ],
+                                    titlesData: FlTitlesData(
+                                      show: true,
+                                      bottomTitles: AxisTitles(
+                                        axisNameSize:
+                                            MediaQuery.of(context).size.height *
+                                                0.02,
+                                        axisNameWidget:
+                                            ChartHelper.getAxisNameWidget(
+                                          chartTheme: chartTheme,
+                                          defaultThemeTextLabelFontSize:
+                                              defaultTextThemeLabelFontSize,
+                                          side: AxisSide.bottom,
+                                        ),
+                                        sideTitles: SideTitles(
+                                          interval: (3600000 / 1000) * 1,
+                                          showTitles: true,
+                                          getTitlesWidget: (value, meta) {
+                                            String? title;
+                                            if (value != minX &&
+                                                value != maxX) {
+                                              title =
+                                                  ChartHelper.getFormattedTime(
+                                                format: timeFormat,
+                                                unformattedValue: value,
                                               );
                                             }
-                                          },
-                                        ).toList(),
-                                        minX: minX,
-                                        maxX: maxX,
-                                      ),
-                                      clipData: const FlClipData.all(),
-                                      gridData: const FlGridData(show: false),
-                                      borderData: ChartHelper.getBorderData(
-                                        chartTheme: chartTheme,
-                                      ),
-                                      lineBarsData: [
-                                        LineChartBarData(
-                                          gradient:
-                                              chartTheme.chartLineColorGradient,
-                                          spots: snaps.data!.priceRecords
-                                              .map((snap) => FlSpot(
-                                                    snap.timestamp
-                                                            .millisecondsSinceEpoch /
-                                                        1000,
-                                                    snap.probability.toDouble(),
-                                                  ))
-                                              .toList(),
-                                          dotData: ChartHelper.getDotData(
+                                            return ChartHelper.getTitleWidget(
                                               chartTheme: chartTheme,
-                                              operation: (spotIndex) {
-                                                if (snaps
-                                                        .data!
-                                                        .priceRecords[spotIndex]
-                                                        .opinion ==
-                                                    Constants
-                                                        .yesOpinionGuideLabel) {
-                                                  return chartTheme
-                                                      .dotStrokeColorForYesOpinion!;
-                                                } else {
-                                                  return chartTheme
-                                                      .dotStrokeColorForNoOpinion!;
-                                                }
-                                              }),
-                                        ),
-                                      ],
-                                      titlesData: FlTitlesData(
-                                        show: true,
-                                        bottomTitles: AxisTitles(
-                                          axisNameSize: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.02,
-                                          axisNameWidget:
-                                              ChartHelper.getAxisNameWidget(
-                                            chartTheme: chartTheme,
-                                            defaultThemeTextLabelFontSize:
-                                                defaultTextThemeLabelFontSize,
-                                            side: AxisSide.bottom,
-                                          ),
-                                          sideTitles: SideTitles(
-                                            interval: (3600000 / 1000) * 1,
-                                            showTitles: true,
-                                            getTitlesWidget: (value, meta) {
-                                              String? title;
-                                              if (value != minX &&
-                                                  value != maxX) {
-                                                title = ChartHelper
-                                                    .getFormattedTime(
-                                                  format: timeFormat,
-                                                  unformattedValue: value,
-                                                );
-                                              }
-                                              return ChartHelper.getTitleWidget(
-                                                chartTheme: chartTheme,
-                                                title: title,
-                                                defaultThemeLabelFontSize:
-                                                    defaultTextThemeLabelFontSize,
-                                                side: AxisSide.bottom,
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                        leftTitles: AxisTitles(
-                                          axisNameWidget:
-                                              ChartHelper.getAxisNameWidget(
-                                            chartTheme: chartTheme,
-                                            defaultThemeTextLabelFontSize:
-                                                defaultTextThemeLabelFontSize,
-                                            side: AxisSide.left,
-                                          ),
-                                          axisNameSize: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.06,
-                                          sideTitles: SideTitles(
-                                            showTitles: true,
-                                            interval: 25,
-                                            getTitlesWidget: (title, meta) =>
-                                                ChartHelper.getTitleWidget(
-                                              chartTheme: chartTheme,
-                                              side: AxisSide.left,
                                               title: title,
                                               defaultThemeLabelFontSize:
                                                   defaultTextThemeLabelFontSize,
-                                            ),
+                                              side: AxisSide.bottom,
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      leftTitles: AxisTitles(
+                                        axisNameWidget:
+                                            ChartHelper.getAxisNameWidget(
+                                          chartTheme: chartTheme,
+                                          defaultThemeTextLabelFontSize:
+                                              defaultTextThemeLabelFontSize,
+                                          side: AxisSide.left,
+                                        ),
+                                        axisNameSize:
+                                            MediaQuery.of(context).size.width *
+                                                0.06,
+                                        sideTitles: SideTitles(
+                                          showTitles: true,
+                                          interval: 25,
+                                          getTitlesWidget: (title, meta) =>
+                                              ChartHelper.getTitleWidget(
+                                            chartTheme: chartTheme,
+                                            side: AxisSide.left,
+                                            title: title,
+                                            defaultThemeLabelFontSize:
+                                                defaultTextThemeLabelFontSize,
                                           ),
                                         ),
-                                        topTitles: const AxisTitles(
-                                          sideTitles: SideTitles(
-                                            showTitles: false,
-                                          ),
+                                      ),
+                                      topTitles: const AxisTitles(
+                                        sideTitles: SideTitles(
+                                          showTitles: false,
                                         ),
-                                        rightTitles: const AxisTitles(
-                                          sideTitles: SideTitles(
-                                            showTitles: false,
-                                          ),
+                                      ),
+                                      rightTitles: const AxisTitles(
+                                        sideTitles: SideTitles(
+                                          showTitles: false,
                                         ),
                                       ),
                                     ),
